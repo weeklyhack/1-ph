@@ -99,6 +99,7 @@ func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool) {
   ////////////
   // BRANCHES
   ////////////
+  config.Branch = append(config.Branch, "current") // add current branch as an alias
 
   // get all matching full-length branches
   branchIndexes := itemsWithin(slug, config.Branch, slugCharsUsed)

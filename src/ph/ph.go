@@ -4,6 +4,7 @@ import (
   "fmt"
   "os"
   "strings"
+  // "exec"
 
   "github.com/codegangsta/cli"
 )
@@ -20,13 +21,20 @@ func main() {
   }
 
   // do the parsing
-  fmt.Println(Parse(config, slug))
+  output, _ := Parse(config, slug)
+
+  for _, remote := range output.Remote {
+    for _, branch := range output.Branch {
+      fmt.Println("$ git push", remote, branch)
+    }
+  }
+  // out, err := exec.Command("git", "push", ).Output()
 
   app := cli.NewApp()
   app.Name = "ph"
   app.Usage = "fight the loneliness!"
   app.Action = func(c *cli.Context) error {
-    // fmt.Println("Hello friend!")
+    fmt.Println("Hello friend!")
     return nil
   }
 

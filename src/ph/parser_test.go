@@ -58,6 +58,31 @@ var parseTests = []struct {
     "originhmaster",
     []string{"origin", "heroku"}, []string{"master"},
   },
+  { // search for current branch
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "origincurrent",
+    []string{"origin"}, []string{"current"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "oc",
+    []string{"origin"}, []string{"current"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "origincurrent",
+    []string{"origin"}, []string{"current"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "ocurrent",
+    []string{"origin"}, []string{"current"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "originc",
+    []string{"origin"}, []string{"current"},
+  },
   { // cannot mix two remotes/branches
     []string{"origin", "heroku"}, []string{"master", "dev"},
     "masherokuter",
