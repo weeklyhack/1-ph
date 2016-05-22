@@ -1,0 +1,3 @@
+so...
+no map/reduce
+no slice.contains
