@@ -68,8 +68,13 @@ func pluckElementsByIndex(haystack []string, needles []int) []string {
   return total
 }
 
-// the main function call.
-func Parse(config RemoteBranchGroup, slug string) RemoteBranchGroup {
+// the main function call. What happens here is reletively simple: We start by
+// marking an array of whether each passed character has been used. Then, we
+// loop though the passed slug to find remote/branch names, or their aliases. As
+// we go, we "check them off" in the array created at the top. At the end, we
+// know which characters are unused and the array with their positions is
+// reterned to be used later.
+func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool) {
   // create an array, specifying whether a charater has been used
   var slugCharsUsed []bool
   for k := 0; k < len(slug); k++ {
@@ -108,5 +113,5 @@ func Parse(config RemoteBranchGroup, slug string) RemoteBranchGroup {
 
   fmt.Println("Unassigned Chars", slugCharsUsed)
 
-  return RemoteBranchGroup{Remote: remotes, Branch: branches}
+  return RemoteBranchGroup{Remote: remotes, Branch: branches}, slugCharsUsed;
 }
