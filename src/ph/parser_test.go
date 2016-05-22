@@ -88,6 +88,46 @@ var parseTests = []struct {
     "masherokuter",
     []string{"heroku"}, []string{"master"},
   },
+  { // colon-delimited branches
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "origin dev:master",
+    []string{"origin"}, []string{"dev:master"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "od:m",
+    []string{"origin"}, []string{"dev:master"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "oc:m",
+    []string{"origin"}, []string{"current:master"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "origin c:m",
+    []string{"origin"}, []string{"current:master"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "dev:master origin",
+    []string{"origin"}, []string{"dev:master"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "origin master:dev",
+    []string{"origin"}, []string{"master:dev"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "heroku m:d",
+    []string{"heroku"}, []string{"master:dev"},
+  },
+  {
+    []string{"origin", "heroku"}, []string{"master", "dev"},
+    "hm:d",
+    []string{"heroku"}, []string{"master:dev"},
+  },
 }
 
 func TestParse(t *testing.T) {

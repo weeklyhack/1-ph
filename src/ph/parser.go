@@ -22,16 +22,48 @@ func indexAreaFree(slugCharsUsed []bool, start int, end int) bool {
 }
 
 // given a haystack and a collection of needles, return all item indexes that are
-// contained within. Also, mark the used charaters within haystackCharsUsed
-func itemsWithin(haystack string, collection []string, haystackCharsUsed []bool) []int {
-  var totals []int
+// contained within. Also, mark the used charaters within haystackCharsUsed.
+// A few edge cases that this handles:
+// - Because we are searching through branches in sequence, the range
+// branch2:branch1 may noe be parsed correctly if branch1 comes up before
+// branch2. Therefore, the below code handles both orders independantly.
+func itemsWithin(haystack string, collection []string, haystackCharsUsed []bool) [][]int {
+  var totals [][]int
+
+  // mark the locations of the "starts" to colon-joined fields
+  endsWithColon := make(map[int] int) // for foo: in `foo:bar`
+  startsWithColon := make(map[int] int) // for :bar in `foo:bar`
 
   for index, item := range collection {
     match := regexp.MustCompile(item).FindStringIndex(haystack)
     if (len(match) != 0) {
+
       // if the specified area hasn't been used, then we're good
       if indexAreaFree(haystackCharsUsed, match[0], match[1]) {
-        totals = append(totals, index)
+        // if this branch has a colon before or after, make sure it's treated specially
+        isColonBranch := false
+
+        // search for colons after and before the current branch
+        if match[0] > 0 && haystack[match[0] - 1] == ':' {
+          // would match def in `abc:def`
+          startsWithColon[match[0] - 1] = index;
+          isColonBranch = true
+        } else if len(haystack) > match[1] && haystack[match[1]] == ':' {
+          // would match abc in `abc:def`
+          endsWithColon[match[1] + 1] = index;
+          isColonBranch = true
+        }
+
+        // is this the first part of a colon-seperated branch group, or
+        // is this the second part? (or neither?)
+        if afterColon, ok := startsWithColon[match[1]]; ok {
+          totals = append(totals, []int{index, afterColon})
+        } else if beforeColon, ok := endsWithColon[match[0]]; ok {
+          totals = append(totals, []int{beforeColon, index})
+        } else if !isColonBranch {
+          // no colon, so just add the new branch name
+          totals = append(totals, []int{index})
+        }
 
         // mark chars as used
         for k := match[0]; k < match[1]; k++ {
@@ -55,15 +87,51 @@ func firstCharOf(haystack []string) []string {
 
 // given a slice of strings and another slice of indecies from the original
 // slice, extract the original data at the specified indexes.
-func pluckElementsByIndex(haystack []string, needles []int) []string {
+func pluckElementsByIndex(haystack []string, needles [][]int) []string {
+  // given: [[1], [2, 3], [4]]
   var total []string
-  for index, elem := range haystack {
-    for _, needle := range needles {
-      if index == needle {
-        total = append(total, elem)
+  // fmt.Println(needles)
+
+
+  for _, needle := range needles {
+    if (len(needle) == 1) {
+      // just a normal element, so only needle[0] really matters
+      // just search though and look for a match
+      for index, elem := range haystack {
+        if index == needle[0] {
+          total = append(total, elem)
+        }
+      }
+    } else if (len(needle) == 2) {
+      // colon-separated element
+      // look for both the part after the colon and the part before
+      // then, merge them together and push to the array
+      firstPart := ""
+      secondPart := ""
+      // fmt.Println("two-part", needle)
+
+      for index, elem := range haystack {
+        if index == needle[0] {
+          firstPart = elem
+        } else if index == needle[1] {
+          secondPart = elem
+        }
+      }
+
+      if len(firstPart) != 0 && len(secondPart) != 0 {
+        total = append(total, firstPart + ":" + secondPart)
       }
     }
   }
+
+
+  // for index, elem := range haystack {
+  //   for _, needle := range needles {
+  //     if index == needle {
+  //       total = append(total, elem)
+  //     }
+  //   }
+  // }
 
   return total
 }
