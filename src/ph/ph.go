@@ -1,10 +1,9 @@
 package main
 
 import (
-  "fmt"
+  // "fmt"
   "os"
   "strings"
-  "os/exec"
 
   "github.com/codegangsta/cli"
 )
@@ -47,27 +46,7 @@ func main() {
   }
   flags = strings.Trim(flags, " ")
 
-  for _, remote := range output.Remote {
-    for _, branch := range output.Branch {
-      fmt.Println("-> $ git", action, remote, branch, flags)
-
-      // run the command
-      var cmd *exec.Cmd
-
-      if len(flags) > 0 {
-        cmd = exec.Command("git", action, remote, branch, flags)
-      } else {
-        cmd = exec.Command("git", action, remote, branch)
-      }
-      out, err := cmd.CombinedOutput()
-
-      if err != nil {
-        fmt.Println("An error occurred D:")
-        fmt.Printf("%s\n", err)
-      }
-      fmt.Printf("%s", out)
-    }
-  }
+  RunGit(action, output, flags)
 
   app := cli.NewApp()
   app.Name = "ph"
