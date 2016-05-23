@@ -27,3 +27,15 @@ func RunGit(action string, output RemoteBranchGroup, flags string) {
     }
   }
 }
+
+func RunCmd(bin string, args []string) error {
+  cmd := exec.Command(bin, args...)
+  out, err := cmd.CombinedOutput()
+
+  if err != nil {
+    fmt.Printf("%s\n", err)
+    return err
+  }
+  fmt.Printf("%s", out)
+  return nil
+}

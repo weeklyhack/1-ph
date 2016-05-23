@@ -4,6 +4,7 @@ import (
   "fmt"
   "os"
   "strings"
+  "io/ioutil"
 
   "github.com/codegangsta/cli"
 )
@@ -55,7 +56,44 @@ func main() {
       Aliases:     []string{},
       Usage:     "inject ph into git to get stats",
       Action: func(c *cli.Context) error {
-        fmt.Println("added task: ", c.Args().First())
+        command := strings.Join(os.Args[3:], " ")
+        binary := c.Args().First()
+
+        // open the file
+        f, err := os.OpenFile("/tmp/dat2", os.O_APPEND|os.O_WRONLY, 0600)
+        if err != nil { panic(err) }
+        defer f.Close()
+
+        // write the command to the file
+        _, err2 := f.WriteString(binary+" "+command+"\n")
+        if err2 != nil { panic(err) }
+
+        // run the command
+        return RunCmd(binary, os.Args[3:])
+      },
+    },
+    {
+      Name:      "report",
+      Aliases:     []string{},
+      Usage:     "report on how many characters ph could have saved you",
+      Action: func(c *cli.Context) error {
+        // open the file
+        data, err := ioutil.ReadFile("/tmp/dat2")
+        if err != nil { panic(err) }
+
+        // read commands
+        commands := strings.Split(string(data), "\n")
+        totalSavings := 0
+        for _, command := range commands {
+          phCommand := DecodeCommand(command)
+          savings := len(command) - (3 + len(phCommand))
+          totalSavings += savings
+          if len(phCommand) > 0 {
+            fmt.Println(command, " -> ph", phCommand, "saving", savings, "characters")
+          }
+        }
+
+        fmt.Println("In total, you could save", totalSavings, "characters by using ph instead of git push")
         return nil
       },
     },
