@@ -94,7 +94,7 @@ func pluckElementsByIndex(haystack []string, needles [][]int) []string {
 
 
   for _, needle := range needles {
-    if (len(needle) == 1) {
+    if len(needle) == 1 {
       // just a normal element, so only needle[0] really matters
       // just search though and look for a match
       for index, elem := range haystack {
@@ -102,13 +102,12 @@ func pluckElementsByIndex(haystack []string, needles [][]int) []string {
           total = append(total, elem)
         }
       }
-    } else if (len(needle) == 2) {
+    } else if len(needle) == 2 {
       // colon-separated element
       // look for both the part after the colon and the part before
       // then, merge them together and push to the array
       firstPart := ""
       secondPart := ""
-      // fmt.Println("two-part", needle)
 
       for index, elem := range haystack {
         if index == needle[0] {
