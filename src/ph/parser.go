@@ -1,7 +1,7 @@
 package main
 
 import (
-  "fmt"
+  // "fmt"
   "regexp"
 )
 
@@ -179,8 +179,6 @@ func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool) {
     branches,
     pluckElementsByIndex(config.Branch, oneCharbranchIndexes)...
   )
-
-  fmt.Println("Unassigned Chars", slugCharsUsed)
 
   return RemoteBranchGroup{Remote: remotes, Branch: branches}, slugCharsUsed;
 }

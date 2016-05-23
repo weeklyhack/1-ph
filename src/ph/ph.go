@@ -11,6 +11,14 @@ import (
 
 
 func main() {
+  flagsLookup := map[string] string {
+    "f": "--force",
+    "n": "--dry-run",
+    "u": "--set-upstream",
+    "q": "--quiet",
+    "v": "--verbose",
+  }
+
   // get the data that should be parsed to form the push command
   slug := strings.Join(os.Args[1:], " ")
 
@@ -21,11 +29,28 @@ func main() {
   }
 
   // do the parsing
-  output, _ := Parse(config, slug)
+  output, availableChars := Parse(config, slug)
 
+  // given the rest of the flags, see if they have been included
+  flags := ""
+  action := "push"
+  for index, unused := range availableChars {
+    if !unused {
+      // are we performing a push or a pull?
+      if slug[index] == 'l' {
+        action = "pull"
+      } else if longFlag, ok := flagsLookup[string(slug[index])]; ok {
+        flags = flags + longFlag + " "
+        availableChars[index] = true // mark this character as used
+      }
+    }
+  }
+  flags = strings.Trim(flags, " ")
+
+  // run the command
   for _, remote := range output.Remote {
     for _, branch := range output.Branch {
-      fmt.Println("$ git push", remote, branch)
+      fmt.Println("$ git", action, remote, branch, flags)
     }
   }
   // out, err := exec.Command("git", "push", ).Output()
