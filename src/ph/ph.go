@@ -1,7 +1,7 @@
 package main
 
 import (
-  // "fmt"
+  "fmt"
   "os"
   "strings"
 
@@ -46,12 +46,24 @@ func main() {
   }
   flags = strings.Trim(flags, " ")
 
-  RunGit(action, output, flags)
-
   app := cli.NewApp()
   app.Name = "ph"
   app.Usage = "Add some chemistry to your git push."
+  app.Commands = []cli.Command {
+    {
+      Name:      "inject",
+      Aliases:     []string{},
+      Usage:     "inject ph into git to get stats",
+      Action: func(c *cli.Context) error {
+        fmt.Println("added task: ", c.Args().First())
+        return nil
+      },
+    },
+  }
   app.Action = func(c *cli.Context) error {
+    RunGit(action, output, flags)
+
+    fmt.Println(c.String("lang"))
     return nil
   }
 

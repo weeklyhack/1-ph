@@ -12,7 +12,6 @@ func RunGit(action string, output RemoteBranchGroup, flags string) {
 
       // run the command
       var cmd *exec.Cmd
-
       if len(flags) > 0 {
         cmd = exec.Command("git", action, remote, branch, flags)
       } else {
