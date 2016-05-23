@@ -9,8 +9,7 @@ import (
   "github.com/codegangsta/cli"
 )
 
-
-func main() {
+func parseArgs() (string, RemoteBranchGroup, string) {
   flagsLookup := map[string] string {
     "f": "--force",
     "n": "--dry-run",
@@ -23,10 +22,10 @@ func main() {
   slug := strings.Join(os.Args[1:], " ")
 
   // start with the remotes and origins that already exist
-  config := RemoteBranchGroup{
-    Remote: []string { "origin", "heroku", "gin"},
-    Branch: []string { "master", "dev" },
-  }
+  remotes := GetCwdRemotes()
+  branches := GetCwdBranches()
+  config := RemoteBranchGroup{Remote: remotes, Branch: branches}
+  fmt.Println(config)
 
   // do the parsing
   output, availableChars := Parse(config, slug)
@@ -47,6 +46,10 @@ func main() {
   }
   flags = strings.Trim(flags, " ")
 
+  return action, output, flags
+}
+
+func main() {
   app := cli.NewApp()
   app.Name = "ph"
   app.Usage = "Add some chemistry to your git push."
@@ -98,10 +101,19 @@ func main() {
       },
     },
   }
-  app.Action = func(c *cli.Context) error {
-    RunGit(action, output, flags)
 
-    fmt.Println(c.String("lang"))
+  app.Action = func(c *cli.Context) error {
+    if GitExists() {
+      action, output, flags := parseArgs()
+      if len(output.Remote) > 0 && len(output.Branch) > 0 {
+        RunGit(action, output, flags)
+      } else {
+        fmt.Println("No action specified. Run with --help for help.")
+      }
+    } else {
+      fmt.Println("Git isn't in your PATH. (You'll need to install git first to use ph)")
+    }
+
     return nil
   }
 
