@@ -9,17 +9,17 @@ import (
   "bufio"
 )
 
-func parseArgs() (string, RemoteBranchGroup, string) {
+func ParseArgs(args []string) (string, RemoteBranchGroup, string) {
   flagsLookup := map[string] string {
     "f": "--force",
     "n": "--dry-run",
-    "u": "--set-upstream",
+    "t": "--set-upstream",
     "q": "--quiet",
     "v": "--verbose",
   }
 
   // get the data that should be parsed to form the push command
-  slug := strings.Join(os.Args[1:], " ")
+  slug := strings.Join(args[1:], " ")
 
   // start with the remotes and origins that already exist
   remotes := GetCwdRemotes()
@@ -107,7 +107,7 @@ func main() {
       report()
     } else {
       // a normal command
-      action, output, flags := parseArgs()
+      action, output, flags := ParseArgs(os.Args)
       if len(output.Remote) > 0 && len(output.Branch) > 0 {
         RunGit(action, output, flags)
       } else {

@@ -14,11 +14,13 @@ var decoderTests = []struct {
   {"git push origin dev", "od"},
   {"git push origin dev --flag", "od"},
   {"git push origin BrAnCh", "oB"},
+  {"git push origin branch:master", "ob:m"},
 
   {"git pull origin master", "lom"},
   {"git pull origin dev", "lod"},
   {"git pull origin BrAnCh", "loB"},
   {"git pull origin dev --flag", "lod"},
+  {"git pull origin branch:master", "lob:m"},
 
   {"git push origin", ""},
   {"git pull origin", ""},
