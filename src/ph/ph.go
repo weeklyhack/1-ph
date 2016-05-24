@@ -5,8 +5,8 @@ import (
   "os"
   "strings"
   "io/ioutil"
-
-  "github.com/codegangsta/cli"
+  "path"
+  "bufio"
 )
 
 func parseArgs() (string, RemoteBranchGroup, string) {
@@ -25,7 +25,6 @@ func parseArgs() (string, RemoteBranchGroup, string) {
   remotes := GetCwdRemotes()
   branches := GetCwdBranches()
   config := RemoteBranchGroup{Remote: remotes, Branch: branches}
-  fmt.Println(config)
 
   // do the parsing
   output, availableChars := Parse(config, slug)
@@ -49,73 +48,73 @@ func parseArgs() (string, RemoteBranchGroup, string) {
   return action, output, flags
 }
 
-func main() {
-  app := cli.NewApp()
-  app.Name = "ph"
-  app.Usage = "Add some chemistry to your git push."
-  app.Commands = []cli.Command {
-    {
-      Name:      "inject",
-      Aliases:     []string{},
-      Usage:     "inject ph into git to get stats",
-      Action: func(c *cli.Context) error {
-        command := strings.Join(os.Args[3:], " ")
-        binary := c.Args().First()
+func inject() {
+  fmt.Println("In order for ph to give you feedback, we're going to install a small function in your ~/.profile file to track all the git pushes and pulls you make. None of the commands you type will leave this system.")
 
-        // open the file
-        f, err := os.OpenFile("/tmp/dat2", os.O_APPEND|os.O_WRONLY, 0600)
-        if err != nil { panic(err) }
-        defer f.Close()
+  fmt.Println("Press any key to continue...")
+  bio := bufio.NewReader(os.Stdin)
+  _, _, err := bio.ReadLine()
 
-        // write the command to the file
-        _, err2 := f.WriteString(binary+" "+command+"\n")
-        if err2 != nil { panic(err) }
+  fmt.Println("Injecting shim...")
 
-        // run the command
-        return RunCmd(binary, os.Args[3:])
-      },
-    },
-    {
-      Name:      "report",
-      Aliases:     []string{},
-      Usage:     "report on how many characters ph could have saved you",
-      Action: func(c *cli.Context) error {
-        // open the file
-        data, err := ioutil.ReadFile("/tmp/dat2")
-        if err != nil { panic(err) }
+  // inject this command as an alias
+  profile := path.Join(os.Getenv("HOME"), ".profile")
+  f, err := os.OpenFile(profile, os.O_APPEND|os.O_WRONLY, 0600)
+  if err != nil { panic(err) }
+  defer f.Close()
 
-        // read commands
-        commands := strings.Split(string(data), "\n")
-        totalSavings := 0
-        for _, command := range commands {
-          phCommand := DecodeCommand(command)
-          savings := len(command) - (3 + len(phCommand))
-          totalSavings += savings
-          if len(phCommand) > 0 {
-            fmt.Println(command, " -> ph", phCommand, "saving", savings, "characters")
-          }
-        }
+  // write the command to the file
+  _, err2 := f.WriteString(`
+# pass all git commands through ph so it can log them to give statistics
+function git {
+  if [ "$1" = "push" ] || [ "$1" = "pull" ]; then
+    echo "git $@">> /tmp/dat2
+  fi
+  $(which git) $@
+}`)
+  if err2 != nil { panic(err) }
 
-        fmt.Println("In total, you could save", totalSavings, "characters by using ph instead of git push")
-        return nil
-      },
-    },
+  fmt.Println("Done!")
+  fmt.Println("Before ph can start helping you save keystrokes, restart your terminal.")
+}
+
+func report() {
+  // open the file
+  data, err := ioutil.ReadFile("/tmp/dat2")
+  if err != nil { panic(err) }
+
+  // read commands
+  commands := strings.Split(string(data), "\n")
+  totalSavings := 0
+  for _, command := range commands {
+    phCommand := DecodeCommand(command)
+    savings := len(command) - (3 + len(phCommand))
+    totalSavings += savings
+    if len(phCommand) > 0 {
+      fmt.Println(command, " -> ph", phCommand, "saving", savings, "characters")
+    }
   }
 
-  app.Action = func(c *cli.Context) error {
-    if GitExists() {
+  fmt.Println("In total, you could save", totalSavings, "characters by using ph instead of git push")
+}
+
+func main() {
+  if GitExists() {
+    // inject or report?
+    if len(os.Args) > 1 && os.Args[1] == "inject" {
+      inject()
+    } else if len(os.Args) > 1 && os.Args[1] == "report" {
+      report()
+    } else {
+      // a normal command
       action, output, flags := parseArgs()
       if len(output.Remote) > 0 && len(output.Branch) > 0 {
         RunGit(action, output, flags)
       } else {
         fmt.Println("No action specified. Run with --help for help.")
       }
-    } else {
-      fmt.Println("Git isn't in your PATH. (You'll need to install git first to use ph)")
     }
-
-    return nil
+  } else {
+    fmt.Println("Git isn't in your PATH. (You'll need to install git first to use ph)")
   }
-
-  app.Run(os.Args)
 }
