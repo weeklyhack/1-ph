@@ -7,7 +7,7 @@ import (
 )
 
 func DecodeCommand(command string) string {
-  r := regexp.MustCompile("git (push|pull) (.+) (.+)")
+  r := regexp.MustCompile("git (push|pull) ([^ ]+) ([^ ]+)")
   match := r.FindStringSubmatch(command)
   final := "" // start with an empty command
 
