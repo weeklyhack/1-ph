@@ -58,3 +58,21 @@ func GetCwdRemotes() []string {
 
   return strings.Split(strings.Trim(string(out), "\n"), "\n")
 }
+
+func GetCwdActiveGitBranch() string {
+  cmd := exec.Command("git", "branch")
+  out, err := cmd.CombinedOutput()
+
+  if err != nil {
+    panic(err)
+  }
+
+  // find the active branch
+  for _, i := range strings.Split(string(out), "\n") {
+    if len(i) > 0 && i[0] == '*' {
+      return i[2:]
+    }
+  }
+
+  return "master" // default to master
+}

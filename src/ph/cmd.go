@@ -2,12 +2,18 @@ package main
 
 import (
   "fmt"
+  "strings"
   "os/exec"
 )
 
 func RunGit(action string, output RemoteBranchGroup, flags string) {
   for _, remote := range output.Remote {
     for _, branch := range output.Branch {
+      // replace any instances of current with the active branch
+      activeBranch := GetCwdActiveGitBranch()
+      branch = strings.Replace(branch, "current", activeBranch, -1)
+
+      // log what we are about to do
       fmt.Println("-> $ git", action, remote, branch, flags)
 
       // run the command
