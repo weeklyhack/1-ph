@@ -3,6 +3,7 @@ package main
 import (
   // "fmt"
   "regexp"
+  "strings"
 )
 
 type RemoteBranchGroup struct {
@@ -141,11 +142,30 @@ func pluckElementsByIndex(haystack []string, needles [][]int) []string {
 // we go, we "check them off" in the array created at the top. At the end, we
 // know which characters are unused and the array with their positions is
 // reterned to be used later.
-func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool) {
+func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool, []string) {
   // create an array, specifying whether a charater has been used
   var slugCharsUsed []bool
   for k := 0; k < len(slug); k++ {
     slugCharsUsed = append(slugCharsUsed, false)
+  }
+
+  ////////////
+  // FLAGS
+  ////////////
+
+  // return all flags that the user has added outside of the app
+  r := regexp.MustCompile("(-[^ -] [^ ]+|--[^ ]+ [^ ]+|-[^ -]|--[^ ]+|--)")
+  flags := r.FindAllString(slug, -1)
+
+  // mark the flag characters as used
+  for _, i := range flags {
+    start := strings.Index(slug, i)
+    end := start + len(i)
+
+    // mark chars as used that are flags
+    for k := start; k < end; k++ {
+      slugCharsUsed[k] = true;
+    }
   }
 
   ////////////
@@ -179,5 +199,5 @@ func Parse(config RemoteBranchGroup, slug string) (RemoteBranchGroup, []bool) {
     pluckElementsByIndex(config.Branch, oneCharbranchIndexes)...
   )
 
-  return RemoteBranchGroup{Remote: remotes, Branch: branches}, slugCharsUsed;
+  return RemoteBranchGroup{Remote: remotes, Branch: branches}, slugCharsUsed, flags;
 }

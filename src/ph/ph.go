@@ -27,10 +27,10 @@ func ParseArgs(args []string) (string, RemoteBranchGroup, string) {
   config := RemoteBranchGroup{Remote: remotes, Branch: branches}
 
   // do the parsing
-  output, availableChars := Parse(config, slug)
+  output, availableChars, manualFlags := Parse(config, slug)
 
   // given the rest of the flags, see if they have been included
-  flags := ""
+  flags := strings.Join(manualFlags, " ")
   action := "push"
   for index, unused := range availableChars {
     if !unused {
