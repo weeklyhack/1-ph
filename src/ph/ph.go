@@ -100,8 +100,30 @@ func report() {
 
 func main() {
   if GitExists() {
-    // inject or report?
-    if len(os.Args) > 1 && os.Args[1] == "inject" {
+    // help or inject or report?
+    if len(os.Args) > 1 && os.Args[1] == "help" {
+      fmt.Println("PH: Add some chemistry to your terminal.")
+      fmt.Println("Easily shorten git pushes and git pulls by abbreviating remotes and branches.")
+      fmt.Println("(The branch and remote names are magically pulled from the current repository)")
+      fmt.Println("For example:")
+      fmt.Println("  ph om -> git push origin master")
+      fmt.Println("  ph od -> git push origin dev")
+      fmt.Println("  ph hm -> git push heroku master")
+      fmt.Println("Or don't - that works too.")
+      fmt.Println("  ph origin m -> git push origin master")
+      fmt.Println("  ph origin master -> git push origin master")
+      fmt.Println("Also, easily add commonly used flags when performing operations.")
+      fmt.Println("  ph oml -> git pull origin master")
+      fmt.Println("  ph omf -> git push origin master --force")
+      fmt.Println("  ph omu -> git push origin master --set-upstream")
+      fmt.Println("  ph omn -> git push origin master --dry-run")
+      fmt.Println("  ph omq -> git push origin master --quiet")
+      fmt.Println("  ph omv -> git push origin master --verbose")
+      fmt.Println("  ph om --flag -> git push origin master --flag")
+      fmt.Println("Are you still skeptical? Prove it to yourself by running ph inject. We'll track your git pushes and pulls so you can see how many keystrokes you'd save by using ph.")
+      fmt.Println()
+      fmt.Println("An app by Ryan Gaus (http:/rgaus.net) built for my weekly hacks challenge. Learn more at http://weeklyhacks.github.io/ph")
+    } else if len(os.Args) > 1 && os.Args[1] == "inject" {
       inject()
     } else if len(os.Args) > 1 && os.Args[1] == "report" {
       report()
@@ -111,7 +133,7 @@ func main() {
       if len(output.Remote) > 0 && len(output.Branch) > 0 {
         RunGit(action, output, flags)
       } else {
-        fmt.Println("No action specified. Run with --help for help.")
+        fmt.Println("No action specified. Run with ph help for help.")
       }
     }
   } else {
