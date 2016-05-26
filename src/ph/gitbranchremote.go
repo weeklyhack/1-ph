@@ -8,10 +8,11 @@ import (
 
 // is git currently installed and in the path?
 func GitExists() bool {
+  _, isNotGitRepo := exec.Command("git", "status").Output()
+  if isNotGitRepo != nil { panic("We cannot find a git repo here.") }
+
   out, err := exec.Command("which", "git").Output()
-  if err != nil {
-    panic(err)
-  }
+  if err != nil { panic(err) }
 
   if len(out) > 0 {
     return true
