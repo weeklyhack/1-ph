@@ -16,7 +16,7 @@ lobv`. Enough with my convoluted examples, here's it in action:
 
 ### Download
 [https://github.com/1egoman/1-ph/tree/master/compiled](Grab a precompiled binary here)
-or, comile it yourself by cloning the repository and running `go build ph` in
+or, compile it yourself by cloning the repository and running `go build ph` in
 the root.
 
 ## Usage
