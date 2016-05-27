@@ -1,7 +1,7 @@
 package main
 
 import (
-  // "fmt"
+  "fmt"
   "regexp"
   "strings"
 )
@@ -36,7 +36,7 @@ func itemsWithin(haystack string, collection []string, haystackCharsUsed []bool)
   startsWithColon := make(map[int] int) // for :bar in `foo:bar`
 
   for index, item := range collection {
-    match := regexp.MustCompile(item).FindStringIndex(haystack)
+    match := regexp.MustCompile(regexp.QuoteMeta(item)).FindStringIndex(haystack)
     if (len(match) != 0) {
 
       // if the specified area hasn't been used, then we're good
