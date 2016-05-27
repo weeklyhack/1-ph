@@ -12,7 +12,7 @@ Instead, do `ph om`. A full 18 characters shorter. Need to do something a little
 more complex, like `git pull origin branch -v`? Simple, just do `ph
 lobv`. Enough with my convoluted examples, here's it in action:
 
-![http://weeklyhack.github.io/assets/images/posts/ph.gif](A demo)
+![A demo](http://weeklyhack.github.io/assets/images/posts/ph.gif)
 
 ### Download
 [https://github.com/1egoman/1-ph/tree/master/compiled](Grab a precompiled binary here)
