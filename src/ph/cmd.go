@@ -17,16 +17,10 @@ func RunGit(action string, output RemoteBranchGroup, flags string) {
       fmt.Println("-> $ git", action, remote, branch, flags)
 
       // run the command
-      var err error
       if len(flags) > 0 {
-        err = RunCmd("git", []string{action, remote, branch, flags})
+        RunCmd("git", []string{action, remote, branch, flags})
       } else {
-        err = RunCmd("git", []string{action, remote, branch})
-      }
-
-      if err != nil {
-        fmt.Println("An error occurred D:")
-        fmt.Printf("%s\n", err)
+        RunCmd("git", []string{action, remote, branch})
       }
     }
   }
@@ -36,10 +30,10 @@ func RunCmd(bin string, args []string) error {
   cmd := exec.Command(bin, args...)
   out, err := cmd.CombinedOutput()
 
+  fmt.Printf("%s", out)
   if err != nil {
-    fmt.Printf("%s\n", err)
+    fmt.Printf("Error: %s\n", err)
     return err
   }
-  fmt.Printf("%s", out)
   return nil
 }
