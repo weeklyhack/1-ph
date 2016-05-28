@@ -9,7 +9,7 @@ A simple way to reduce keystrokes and make git push faster.
 - Dead simple to use
 
 ## Download
-[https://github.com/1egoman/1-ph/tree/master/compiled](Grab a precompiled binary here)
+[Grab a precompiled binary here](https://github.com/1egoman/1-ph/tree/master/compiled)
 or, compile it yourself by cloning the repository and running `go build ph` in
 the root. Either way, copy the binary to somewhere in your $PATH, then run `ph
 help`.
