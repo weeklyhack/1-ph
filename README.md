@@ -12,6 +12,9 @@
 ![A demo](http://weeklyhack.github.io/assets/images/posts/ph.gif)
 
 ## Download
+```
+curl -OL https://github.com/weeklyhack/1-ph/raw/master/compiled/ph-$(uname -s)-$(uname -p)
+```
 [Grab a precompiled binary here](https://github.com/1egoman/1-ph/tree/master/compiled)
 or compile it yourself by cloning the repository and running `go build ph` in
 the root. Either way, copy the binary to somewhere in your $PATH, then run `ph
