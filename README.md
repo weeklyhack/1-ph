@@ -2,8 +2,8 @@
 
 ## Ph is a simple way to reduce keystrokes and make git push faster.
 - Scans your current repository, intelligently finding git remotes and branches.
-- Doesn't require any runtime installed on the remote system
-- Dead simple to use
+- Doesn't require any runtime installed on the remote system.
+- Dead simple to install and use.
 
 ## Usage
 ![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
