@@ -1,5 +1,7 @@
 # PH: Add some chemistry to your git push.
 
+![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
+
 Every day, I push code with git at least 50 times. Usually, I run something
 like `git push origin master`, a full 22 characters. There had to be a more
 efficient way to push code. Am I lazy? Maybe. But, efficiency matters.
