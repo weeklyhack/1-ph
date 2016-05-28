@@ -1,16 +1,12 @@
 <img alt="Ph" src="https://cdn.rawgit.com/weeklyhack/1-ph/master/img/logo.svg" style="height: 100px;" />
 
 ## Ph is a simple way to reduce keystrokes and make git push faster.
-
-------------
-
-## Usage
-![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
-
-## Features
 - Scans your current repository, intelligently finding git remotes and branches.
 - Doesn't require any runtime installed on the remote system
 - Dead simple to use
+
+## Usage
+![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
 
 ## Download
 [Grab a precompiled binary here](https://github.com/1egoman/1-ph/tree/master/compiled)
