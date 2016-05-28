@@ -1,4 +1,5 @@
-# PH: Add some chemistry to your git push.
+# Ph: Add some chemistry to your git push.
+A simple way to reduce keystrokes and make git push faster.
 
 Every day, I push code with git at least 50 times. Usually, I run something
 like `git push origin master`, a full 22 characters. There had to be a more
