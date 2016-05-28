@@ -1,6 +1,8 @@
 # Ph: Add some chemistry to your git push.
+![Ph](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/logo.svg)
 A simple way to reduce keystrokes and make git push faster.
 
+## Usage
 ![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
 
 ## Features
@@ -13,9 +15,6 @@ A simple way to reduce keystrokes and make git push faster.
 or compile it yourself by cloning the repository and running `go build ph` in
 the root. Either way, copy the binary to somewhere in your $PATH, then run `ph
 help`.
-
-## Usage
-Run `ph help`.
 
 ## A few real world examples
 ![A demo](http://weeklyhack.github.io/assets/images/posts/ph.gif)
