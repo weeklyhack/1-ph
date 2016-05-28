@@ -11,14 +11,11 @@
 ## A few real world examples
 ![A demo](http://weeklyhack.github.io/assets/images/posts/ph.gif)
 
-## Download
+## Install with one command
 ```
-curl -OL https://github.com/weeklyhack/1-ph/raw/master/compiled/ph-$(uname -s)-$(uname -p)
+curl -L https://github.com/weeklyhack/1-ph/raw/master/compiled/ph-$(uname -s)-$(uname -p) > ph && chmod +x ph && sudo cp ph /usr/local/bin/ph
 ```
-[Grab a precompiled binary here](https://github.com/1egoman/1-ph/tree/master/compiled)
-or compile it yourself by cloning the repository and running `go build ph` in
-the root. Either way, copy the binary to somewhere in your $PATH, then run `ph
-help`.
+Then, run `ph help`.
 
 ## Why did I make this?
 Every day, I push code with git at least 50 times. Usually, I run something
