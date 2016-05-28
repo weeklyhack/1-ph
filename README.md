@@ -1,7 +1,7 @@
 <img alt="Ph" src="https://cdn.rawgit.com/weeklyhack/1-ph/master/img/logo.svg" style="height: 100px;" />
 
 ## Ph is a simple way to reduce keystrokes and make git push faster.
-- Scans your current repository, intelligently finding git remotes and branches.
+- Better than a shell alias because it scans your current repository, intelligently finding git remotes and branches.
 - Doesn't require any runtime installed on the remote system.
 - Dead simple to install and use.
 
