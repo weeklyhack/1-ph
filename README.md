@@ -1,5 +1,8 @@
-# Ph: Add some chemistry to your git push.
-A simple way to reduce keystrokes and make git push faster.
+<img alt="Ph" src="https://cdn.rawgit.com/weeklyhack/1-ph/master/img/logo.svg" style="height: 100px;" />
+
+## Ph is a simple way to reduce keystrokes and make git push faster.
+
+------------
 
 ![Introduction](https://cdn.rawgit.com/weeklyhack/1-ph/master/img/intro.svg)
 
@@ -27,4 +30,3 @@ efficient way to push code. Am I lazy? Maybe. But, efficiency matters.
 I tried some fancy shell aliases, and while they
 were ok they never really worked quite right for my needs. I figured this
 would be a perfect opportunity to write a solution.
-
